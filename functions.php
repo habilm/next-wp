@@ -112,4 +112,15 @@ function custom_rest_api_url($url) {
 }
 add_filter('rest_url', 'custom_rest_api_url');
 
+
+function filter_entity_decode_for_content ($response, $post, $request) {
+  if (isset($response->data['title']['rendered'])) {
+      $response->data['title']['rendered'] = html_entity_decode($response->data['title']['rendered']);
+  }
+  return $response;
+}
+
+add_filter('rest_prepare_post', "filter_entity_decode_for_content", 10, 3);
+add_filter('rest_prepare_page', "filter_entity_decode_for_content", 10, 3);
+
 ?>
